@@ -23,11 +23,12 @@ def get_float_numbers(line: str) -> List[float]:
 def run(*functions: Tuple[Callable[[Any], int]]) -> None:
     """Run the problem functions with the defined day problem input"""
     day = inspect.stack()[-1].filename.split('.')[0]
-    input_file_suffix = f'-{sys.argv[1]}' if len(sys.argv) > 1 else ''
+    input_file_suffixes = [f'-{arg}' if arg else '' for arg in sys.argv[1:]] if len(sys.argv) > 1 else ['']
 
-    print(f'{_as_red("Day " + day)}:')
-    lines = _read_problem_input_lines(day, input_suffix=input_file_suffix)
-    _run_problem_functions(lines, *functions)
+    for input_file_suffix in input_file_suffixes:
+        print(f'{_as_red("Day " + day)}:')
+        lines = _read_problem_input_lines(day, input_suffix=input_file_suffix)
+        _run_problem_functions(lines, *functions)
 
 def _as_red(text):
     return f'\u001b[31;1m{text}\u001b[0m'
