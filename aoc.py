@@ -48,7 +48,7 @@ def _run_problem_functions(lines, *functions):
         started_at = time.perf_counter()
         result = func(lines)
         duration = time.perf_counter() - started_at
-        print(f'  [Info] Answer {index + 1}: {result:<15} [{duration:>11.6f} sec]')
+        print(f'  [Info] Answer {index + 1}: {result:<18} [{duration:>11.6f} sec]')
     print('')
 
 def _iter_problem_names():
