@@ -1,7 +1,11 @@
-Advent of Code 2021
+Advent of Code 2021 
 ===
 
-* [Advent of Code 2021](https://adventofcode.com/2021)
+[Advent of Code 2021](https://adventofcode.com/2021)
+
+![](assets/aoc-stars.png)
+
+![](assets/aoc-map.png)
 
 ## Run a day problem
 
