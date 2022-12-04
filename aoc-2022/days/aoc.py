@@ -12,13 +12,19 @@ def get_numbers(line: str) -> List[str]:
     """Return the string representation of int and float numbers from the text"""
     return re.findall(r'(\-?\d+(?:\.\d+)?)', line)
 
-def get_int_numbers(line: str) -> List[int]:
-    """Return int numbers from the text"""
-    return [int(n) for n in get_numbers(line)]
+def get_positive_numbers(line: str) -> List[str]:
+    """Return the string representation of positive int and float numbers from the text"""
+    return re.findall(r'(\d+(?:\.\d+)?)', line)
 
-def get_float_numbers(line: str) -> List[float]:
+def get_int_numbers(line: str, only_positive: bool = False) -> List[int]:
+    """Return int numbers from the text"""
+    numbers = get_positive_numbers(line) if only_positive else get_numbers(line)
+    return [int(n) for n in numbers]
+
+def get_float_numbers(line: str, only_positive: bool = False) -> List[float]:
     """Return float numbers from the text"""
-    return [float(n) for n in get_numbers(line)]
+    numbers = get_positive_numbers(line) if only_positive else get_numbers(line)
+    return [float(n) for n in numbers]
 
 def run(*functions: Tuple[Callable[[Any], int]]) -> None:
     """Run the problem functions with the defined day problem input"""
