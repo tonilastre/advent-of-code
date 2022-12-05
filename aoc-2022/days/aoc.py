@@ -48,7 +48,7 @@ def _read_problem_input_lines(day: str, input_suffix: str=''):
 
     print(f'  [Info] Reading input from {input_file_path}...')
     with input_file_path.open() as f:
-        return [l.strip() for l in f.readlines()]
+        return [l.strip('\n') for l in f.readlines()]
 
 def _run_problem_functions(lines, *functions):
     for index, func in enumerate(functions):
