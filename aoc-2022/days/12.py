@@ -10,7 +10,7 @@ def enumerate_matrix(matrix):
         for j in range(0, len(matrix[0])):
             yield Position(i, j), matrix[i][j]
 
-def iter_ajd_positions(matrix, position):
+def iter_adj_positions(matrix, position):
     for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
         new_x = position.x + dx
         new_y = position.y + dy
@@ -34,7 +34,7 @@ def get_min_distance(map, start_position: Position, end_positions: Set[Position]
             return distance
 
         current_value = map[position.x][position.y]
-        for adj_position in iter_ajd_positions(map, position):
+        for adj_position in iter_adj_positions(map, position):
             if adj_position in visited_positions:
                 continue
 
