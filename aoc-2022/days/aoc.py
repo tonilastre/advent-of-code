@@ -2,11 +2,32 @@ import re
 import sys
 import time
 import inspect
+from itertools import tee
 from pathlib import Path
-from typing import List, Any, Callable, Tuple
+from typing import List, Any, Callable, Tuple, Iterable, TypeVar, Iterator, Union
 
 _INPUTS_DIR = 'inputs'
 _HERE = Path(__file__).parent
+
+T = TypeVar('T')
+
+def pairwise(iterable: Iterable[T]) -> Iterator[Tuple[T, T]]:
+    """Return successive overlapping pairs taken from the input iterable. (for versions < 3.10)"""
+    first, second = tee(iterable)
+    next(second, None)
+    return zip(first, second)
+
+def batch(iterable: Iterable[T], batch_size: int = 1) -> Iterator[List[T]]:
+    array = list(iterable)
+    array_len = len(array)
+
+    for i in range(0, array_len, batch_size):
+        yield array[i:min(i + batch_size, array_len)]
+
+def sign(value: Union[int, float]) -> int:
+    if value == 0:
+        return 0
+    return -1 if value < 0 else 1
 
 def get_numbers(line: str) -> List[str]:
     """Return the string representation of int and float numbers from the text"""
