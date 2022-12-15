@@ -1,12 +1,10 @@
 from typing import List, Tuple
-from functools import lru_cache
 from collections import namedtuple
 from aoc import run, get_int_numbers
 
 Point = namedtuple('Point', 'x, y')
 Range = namedtuple('Range', 'start, end')
 
-@lru_cache
 def get_manhattan_distance(point1: Point, point2: Point) -> int:
     return abs(point1.x - point2.x) + abs(point1.y - point2.y)
 
@@ -33,33 +31,6 @@ def merge_ranges(ranges: List[Range], new_range: Range) -> List[Range]:
     ))
     return sorted(merged_ranges)
 
-def remove_ranges(range: Range, removable_ranges: List[Range]) -> List[Range]:
-    ranges = [range]
-
-    for removable_range in removable_ranges:
-        new_ranges = []
-        for range in ranges:
-            if not is_overlapping_range(range, removable_range):
-                new_ranges.append(range)
-                continue
-
-            if range.start < removable_range.start and range.end <= removable_range.end:
-                new_ranges.append(Range(range.start, removable_range.start))
-                continue
-
-            if removable_range.start <= range.start and removable_range.end < range.end:
-                new_ranges.append(Range(removable_range.end, range.end))
-                continue
-
-            if range.start < removable_range.start and removable_range.end < range.end:
-                new_ranges.append(Range(range.start, removable_range.start))
-                new_ranges.append(Range(removable_range.end, range.end))
-                continue
-
-        ranges = new_ranges
-
-    return ranges
-
 def get_signal_ranges(pairs: Tuple[Point, Point], target_y: int) -> List[Range]:
     ranges = []
 
@@ -71,6 +42,25 @@ def get_signal_ranges(pairs: Tuple[Point, Point], target_y: int) -> List[Range]:
             ranges = merge_ranges(ranges, Range(sensor.x - offset_x, sensor.x + offset_x + 1))
 
     return ranges
+
+def get_available_point(pairs: Tuple[Point, Point], min_value: int, max_value: int):
+    sensor_distances = sorted((s, get_manhattan_distance(s, b)) for s, b in pairs)
+
+    for y in range(min_value, max_value + 1):
+        x = min_value
+
+        for sensor, d in sensor_distances:
+            dx = abs(sensor.x - x)
+            dy = abs(sensor.y - y)
+            if dx + dy <= d:
+                x = sensor.x + (d - dy) + 1
+                if x > max_value:
+                    break
+
+        if x <= max_value:
+            break
+
+    return Point(x, y)
 
 def get_first(lines):
     pairs = [parse_input_line(line) for line in lines]
@@ -89,18 +79,8 @@ def get_second(lines):
     min_value = 0
     max_value = 4_000_000
 
-    range_x = Range(min_value, max_value + 1)
-
-    for y in range(min_value, max_value + 1):
-        ranges = get_signal_ranges(pairs, target_y=y)
-        available_ranges = remove_ranges(range_x, ranges)
-        if not len(available_ranges):
-            continue
-
-        x = available_ranges[0].start
-        return x * max_value + y
-
-    return 0
+    point = get_available_point(pairs, min_value=min_value, max_value=max_value)
+    return point.x * max_value + point.y
 
 if __name__ == '__main__':
     run(get_first, get_second)
