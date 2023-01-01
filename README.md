@@ -7,4 +7,4 @@ repository holds a separate directory for each Advent of Code season:
 | Directory (Year)      | Language | Stars                              |
 | --------------------- | -------- | ---------------------------------- |
 | [/aoc-2021](aoc-2021) | Python   | ![](aoc-2021/assets/aoc-stars.png) |
-| [/aoc-2022](aoc-2022) | Python   |                                    | 
+| [/aoc-2022](aoc-2022) | Python   | ![](aoc-2022/assets/aoc-stars.png) | 

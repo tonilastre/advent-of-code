@@ -58,11 +58,10 @@ def get_max_pressure(room_by_name, closed_names, places):
 
     places = sorted(places, reverse=True)
     max_pressure = 0
-#     is_starting_place = all(p.room_name == 'AA' for p in places)
 
     for i, closed_name in enumerate(closed_names):
-#         if is_starting_place:
-#             print(f'{i}/{len(closed_names)} start with {closed_name}')
+        # if all(p.room_name == 'AA' for p in places):
+        #     print(f'{i}/{len(closed_names)} start with {closed_name}')
         new_places = list(places)
         new_closed_names = closed_names ^ {closed_name}
 

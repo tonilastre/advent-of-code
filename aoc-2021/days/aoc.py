@@ -7,6 +7,7 @@ from typing import List, Any, Callable, Tuple
 
 _INPUTS_DIR = 'inputs'
 _HERE = Path(__file__).parent
+_FUNCTION_NAMES = ('get_first', 'get_second')
 
 def get_numbers(line: str) -> List[str]:
     """Return the string representation of int and float numbers from the text"""
@@ -45,24 +46,35 @@ def _read_problem_input_lines(day: str, input_suffix: str=''):
         return [l.strip() for l in f.readlines()]
 
 def _run_problem_functions(lines, *functions):
+    total_duration = 0
     for index, func in enumerate(functions):
         started_at = time.perf_counter()
         result = func(lines)
         duration = time.perf_counter() - started_at
+        total_duration += duration
         print(f'  [Info] Answer {index + 1}: {result:<18} [{duration:>11.6f} sec]')
     print('')
+    return total_duration
 
 def _iter_problem_names():
     return sorted(str(file.with_suffix('')) for file in _HERE.iterdir() if re.match(r'\d\d.py', file.name))
 
 def _main(args):
     problem_names = [f'{int(arg):02}' for arg in args] if args else _iter_problem_names()
+    total_duration = 0
+
     for problem_name in problem_names:
         problem_module = __import__(problem_name, fromlist=[])
 
         print(f'{_as_red("Day " + problem_name)}:')
         lines = _read_problem_input_lines(problem_name)
-        _run_problem_functions(lines, problem_module.get_first, problem_module.get_second)
+        problem_functions = [getattr(problem_module, name) for name in _FUNCTION_NAMES if hasattr(problem_module, name)]
+        total_duration += _run_problem_functions(lines, *problem_functions)
+
+    if len(problem_names) > 1:
+        print('')
+        print('-' * 55)
+        print(f'{_as_red("Total")}:                                [{total_duration:>11.6f} sec]')
 
 if __name__ == '__main__':
     _main(sys.argv[1:])

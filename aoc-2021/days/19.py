@@ -97,7 +97,7 @@ def get_calibrated_scanners(scanners):
 
             checked_scanner_index_pairs.add(scanner_index_pair)
             scanner.calibrate(calibrated_scanner)
-            print(f'Checking {scanner.index:02} - {calibrated_scanner.index:02} {"(calibrated)" if scanner.is_calibrated() else ""}')
+            # print(f'Checking {scanner.index:02} - {calibrated_scanner.index:02} {"(calibrated)" if scanner.is_calibrated() else ""}')
             if scanner.is_calibrated():
                 calibrated_scanners.append(scanner)
                 break
