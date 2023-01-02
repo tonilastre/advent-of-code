@@ -72,7 +72,6 @@ def _main(args):
         total_duration += _run_problem_functions(lines, *problem_functions)
 
     if len(problem_names) > 1:
-        print('')
         print('-' * 55)
         print(f'{_as_red("Total")}:                                [{total_duration:>11.6f} sec]')
 
